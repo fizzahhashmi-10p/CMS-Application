@@ -1,10 +1,10 @@
 package org.example.todoapp.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.example.todoapp.service.UserService;
 import org.example.todoapp.model.User;
-import org.springframework.stereotype.Service;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class AuthenticationService{
