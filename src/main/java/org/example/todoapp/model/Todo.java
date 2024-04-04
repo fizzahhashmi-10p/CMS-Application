@@ -1,5 +1,7 @@
 package org.example.todoapp.model;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 @Entity
 public class Todo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
     private String username;
@@ -24,8 +27,7 @@ public class Todo {
 
     public Todo(){}
 
-    public Todo(int id, String username, String description, LocalDate targetDate, boolean done) {
-        this.id = id;
+    public Todo( String username, String description, LocalDate targetDate, boolean done) {
         this.username = username;
         this.description = description;
         this.targetDate = targetDate;
@@ -84,5 +86,12 @@ public class Todo {
         return done;
     }
 
+    public Todo(int id, String username, String description, LocalDate targetDate, boolean done) {
+        this.id = id;
+        this.username = username;
+        this.description = description;
+        this.targetDate = targetDate;
+        this.done = done;
+    }
 
 }
