@@ -16,6 +16,11 @@ import org.example.todoapp.service.UserService;
 import org.example.todoapp.service.TodoService;
 import org.example.todoapp.service.AuthenticationService;
 import org.example.todoapp.exception.InvalidCredentialsException;
+import org.example.todoapp.exception.ResourceNotFoundException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+
 
 @Controller
 public class UserController{
@@ -44,9 +49,14 @@ public class UserController{
                           @RequestParam String name,
                           @RequestParam String password,
                           @RequestParam String confirmPassword,
-                          @RequestParam Role role
+                          @RequestParam Role role, RedirectAttributes redirectAttributes
         ){
+        try{
             userService.saveUser(new User(username,name,password,role));
+        }
+        catch (Exception ex){
+            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        }
         return "redirect:/login";
     }
 
@@ -63,22 +73,38 @@ public class UserController{
             throw new InvalidCredentialsException("Invalid credentials provided");
         }
         catch (InvalidCredentialsException ex) {
-            model.addAttribute("error", "Invalid credentials. Please try again.");
+            model.addAttribute("error", ex.getMessage());
              return "LoginPage"; // Return the login page with error message
         }
     }
 
     @RequestMapping(value="users", method=RequestMethod.GET)
     public String usersList(ModelMap model){
-        model.put("userlist",userService.getAllusers());
+        try{
+            List<User> users = userService.getAllusers();
+            if (users != null) {
+                model.put("userlist", users);
+            }
+            else{
+                throw new ResourceNotFoundException("Failed to fetch user list.");
+            }
+        }
+        catch (ResourceNotFoundException ex) {
+            model.addAttribute("error", ex.getMessage());
+        }
         return "UserPage";
     }
 
 
     @RequestMapping("/users/delete/{username}")
-    public String deleteUsers(@PathVariable String username){
-        todoService.deleteUserTodos(username);
-        userService.deleteUser(userService.findUser(username).getId());
+    public String deleteUsers(@PathVariable String username, RedirectAttributes redirectAttributes){
+        try {
+            todoService.deleteUserTodos(username);
+            userService.deleteUser(userService.findUser(username).getId());
+        }
+        catch ( Exception ex){
+            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        }
         return "redirect:/users";
     }
 

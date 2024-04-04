@@ -7,6 +7,12 @@
         <title>Todo App - Users</title>
         <link href="webjars/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+        <style>
+            .error{
+                color:red;
+                font-size: small;
+            }
+        </style>
     </head>
 
     <body class="container">
@@ -40,6 +46,16 @@
             </tr>   
         </c:forEach>
         </table>
+        <div class="error">
+            <c:choose>
+                    <c:when test="${not empty error}">
+                        <p>Error: ${error}</p>
+                    </c:when>
+                    <c:when test="${not empty flash.error}">
+                        <p>Error: ${flash.error}</p>
+                    </c:when>
+            </c:choose>
+        </div>
     </body>
     <script>
         function goBack() {

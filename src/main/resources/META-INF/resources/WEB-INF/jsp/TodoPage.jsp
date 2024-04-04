@@ -18,6 +18,10 @@
             a{
                 color:cadetblue;
             }
+            .error{
+                color:red;
+                font-size: small;
+            }
         </style>
 
     </head>
@@ -100,6 +104,16 @@
                 </tr>
             </tbody>
         </table>
+        <div class="error">
+            <c:choose>
+                <c:when test="${not empty error}">
+                    <p>Error: ${error}</p>
+                </c:when>
+                <c:when test="${not empty flash.error}">
+                    <p>Error: ${flash.error}</p>
+                </c:when>
+            </c:choose>
+        </div>
     </body>
     <script src="webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
     <script src="webjars/jquery/3.6.0/jquery.min.js"></script>
